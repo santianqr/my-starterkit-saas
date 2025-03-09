@@ -15,7 +15,7 @@ export function LatestPost() {
       setName("");
     },
   });
-
+  
   return (
     <div className="w-full max-w-xs">
       {latestPost ? (

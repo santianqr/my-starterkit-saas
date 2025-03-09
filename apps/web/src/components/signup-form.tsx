@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import type { z } from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,22 +17,17 @@ import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/input-password";
 import { Separator } from "@/components/ui/separator";
 import { GoogleButton } from "./google-button";
+import { createAccountFormSchema } from "@/lib/formSchemas";
+import { api } from "@/trpc/react";
+import { toast } from "sonner";
+import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 
-const formSchema = z
-  .object({
-    name: z.string().min(2).max(50),
-    email: z.string().email(),
-    password: z.string().min(8),
-    passwordConfirmation: z.string().min(8),
-  })
-  .refine((data) => data.password === data.passwordConfirmation, {
-    message: "Passwords don't match",
-    path: ["passwordConfirmation"],
-  });
 export function SignUpForm() {
+  const router = useRouter();
   // 1. Define your form.
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createAccountFormSchema>>({
+    resolver: zodResolver(createAccountFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -41,10 +36,20 @@ export function SignUpForm() {
     },
   });
 
+  const createAccount = api.auth.createAccount.useMutation({
+    onSuccess: async () => {
+      toast.success("Account created successfully");
+      router.push('/auth/signin');
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  function onSubmit(values: z.infer<typeof createAccountFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
+    createAccount.mutate(values);
     console.log(values);
   }
   return (
@@ -134,8 +139,16 @@ export function SignUpForm() {
           )}
         />
 
-        <Button type="submit" className="w-full font-semibold shadow-md">
-          Sign Up
+        <Button
+          type="submit"
+          className="w-full font-semibold shadow-md"
+          disabled={createAccount.isPending}
+        >
+          {createAccount.isPending ? (
+            <Loader className="animate-spin" />
+          ) : (
+            "Sign Up"
+          )}
         </Button>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
