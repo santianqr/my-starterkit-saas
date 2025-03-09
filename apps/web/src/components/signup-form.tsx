@@ -57,7 +57,12 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>Full Name</FormLabel>
               <FormControl>
-                <Input placeholder="your name" type="text" {...field} />
+                <Input
+                  placeholder="your name"
+                  type="text"
+                  className="border-gray-700 bg-gray-800 placeholder:text-gray-500"
+                  {...field}
+                />
               </FormControl>
               {/* <FormDescription>
                 This is your public display name.
@@ -73,7 +78,12 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input placeholder="your@email.com" type="email" {...field} />
+                <Input
+                  placeholder="your@email.com"
+                  type="email"
+                  className="border-gray-700 bg-gray-800 placeholder:text-gray-500"
+                  {...field}
+                />
               </FormControl>
               {/* <FormDescription>
                 This is your public display name.
@@ -90,7 +100,11 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="*****" {...field} />
+                <PasswordInput
+                  placeholder="*****"
+                  className="border-gray-700 bg-gray-800 placeholder:text-gray-500"
+                  {...field}
+                />
               </FormControl>
               {/* <FormDescription>
                 This is your public display name.
@@ -106,7 +120,11 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <PasswordInput placeholder="*****" {...field} />
+                <PasswordInput
+                  placeholder="*****"
+                  className="border-gray-700 bg-gray-800 placeholder:text-gray-500"
+                  {...field}
+                />
               </FormControl>
               {/* <FormDescription>
                 This is your public display name.

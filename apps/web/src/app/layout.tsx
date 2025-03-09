@@ -21,7 +21,7 @@ export default function RootLayout({
       className={`${GeistSans.variable}`}
       suppressHydrationWarning
     >
-      <body>
+      <body className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-indigo-950">
         <TRPCReactProvider>
           {" "}
           <ThemeProvider

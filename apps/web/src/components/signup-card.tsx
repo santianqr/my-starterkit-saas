@@ -11,7 +11,7 @@ import {
 
 export function SignUpCard() {
   return (
-    <Card className="w-full max-w-md border-muted shadow-lg">
+    <Card className="w-full max-w-md border-muted shadow-lg bg-gray-900 border-gray-800">
       <CardHeader className="space-y-1">
         <div className="flex items-center justify-between">
           <CardTitle className="text-2xl font-bold">
