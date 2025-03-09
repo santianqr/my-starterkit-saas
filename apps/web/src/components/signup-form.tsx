@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-//   FormDescription,
+  //   FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/input-password";
+import { Separator } from "@/components/ui/separator";
+import { GoogleButton } from "./google-button";
 
 const formSchema = z
   .object({
@@ -115,8 +117,19 @@ export function SignUpForm() {
         />
 
         <Button type="submit" className="w-full font-semibold shadow-md">
-         Sign Up
+          Sign Up
         </Button>
+        <div className="relative">
+          <div className="absolute inset-0 flex items-center">
+            <Separator className="w-full" />
+          </div>
+          <div className="relative flex justify-center text-xs uppercase">
+            <span className="bg-card px-2 text-muted-foreground">
+              Or continue with
+            </span>
+          </div>
+        </div>
+        <GoogleButton />
       </form>
     </Form>
   );
