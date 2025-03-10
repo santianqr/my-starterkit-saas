@@ -4,6 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import type { z } from "zod";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import {
   Form,
   FormControl,
@@ -80,7 +81,18 @@ export function SignInForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="">Password</FormLabel>
+              <div className="grid gap-2">
+                <div className="flex items-center">
+                  <FormLabel className="">Password</FormLabel>
+                  <Link
+                    href="/auth/forgot-password"
+                    className="ml-auto text-xs underline-offset-4 hover:underline"
+                  >
+                    Forgot your password?
+                  </Link>
+                </div>
+              </div>
+
               <FormControl>
                 <PasswordInput placeholder="*****" className="" {...field} />
               </FormControl>
@@ -108,7 +120,7 @@ export function SignInForm() {
             </span>
           </div>
         </div>
-        <GoogleButton type='in' />
+        <GoogleButton type="in" />
       </form>
     </Form>
   );

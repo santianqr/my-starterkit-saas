@@ -1,11 +1,12 @@
 import { z } from "zod";
-
+// improt {hash} from "argon2"
 import {
   createTRPCRouter,
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
 import { signupFormSchema } from "@/lib/schemas";
+import { hash } from "argon2";
 
 export const authRouter = createTRPCRouter({
   hello: publicProcedure
@@ -53,11 +54,13 @@ export const authRouter = createTRPCRouter({
           throw new Error("Email already exists");
         }
 
+        const hashedPassword = await hash(input.password);
+
         const user = await ctx.db.user.create({
           data: {
             name: input.name,
             email: input.email,
-            password: input.password,
+            password: hashedPassword,
           },
         });
         return user;
