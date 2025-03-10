@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SignUpForm } from "./signup-form";
+import { SignInForm } from "@/components/signin/signin-form";
 import {
   Card,
   CardContent,
@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "@/components/ui/card";
 
-export function SignUpCard() {
+export function SignInCard() {
   return (
     <Card className="w-full max-w-md backdrop-blur-md shadow-2xl">
       <CardHeader className="space-y-1">
@@ -21,16 +21,16 @@ export function SignUpCard() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <SignUpForm />
+        <SignInForm />
       </CardContent>
       <CardFooter>
         <p className="w-full text-center text-sm text-slate-400">
-          Already have an account?{" "}
+        Don&apos;t have an account?{" "}
           <Link
-            href="/auth/sign"
+            href="/auth/signup"
             className="text-primary hover:text-primary/80 font-medium"
           >
-            Sign in
+            Sign up
           </Link>
         </p>
       </CardFooter>

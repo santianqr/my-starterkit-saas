@@ -16,8 +16,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/input-password";
 import { Separator } from "@/components/ui/separator";
-import { GoogleButton } from "./google-button";
-import { createAccountFormSchema } from "@/lib/formSchemas";
+import { GoogleButton } from "@/components/google-button";
+import { signupFormSchema } from "@/lib/schemas";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
 import { Loader } from "lucide-react";
@@ -26,8 +26,8 @@ import { useRouter } from "next/navigation";
 export function SignUpForm() {
   const router = useRouter();
   // 1. Define your form.
-  const form = useForm<z.infer<typeof createAccountFormSchema>>({
-    resolver: zodResolver(createAccountFormSchema),
+  const form = useForm<z.infer<typeof signupFormSchema>>({
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
       name: "",
       email: "",
@@ -39,14 +39,14 @@ export function SignUpForm() {
   const createAccount = api.auth.createAccount.useMutation({
     onSuccess: async () => {
       toast.success("Account created successfully");
-      router.push('/auth/signin');
+      router.push("/auth/signin");
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof createAccountFormSchema>) {
+  function onSubmit(values: z.infer<typeof signupFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     createAccount.mutate(values);
@@ -105,11 +105,7 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel className="">Password</FormLabel>
               <FormControl>
-                <PasswordInput
-                  placeholder="*****"
-                  className=""
-                  {...field}
-                />
+                <PasswordInput placeholder="*****" className="" {...field} />
               </FormControl>
               {/* <FormDescription>
                 This is your public display name.
@@ -125,11 +121,7 @@ export function SignUpForm() {
             <FormItem>
               <FormLabel className="">Confirm Password</FormLabel>
               <FormControl>
-                <PasswordInput
-                  placeholder="*****"
-                  className=""
-                  {...field}
-                />
+                <PasswordInput placeholder="*****" className="" {...field} />
               </FormControl>
               {/* <FormDescription>
                 This is your public display name.
@@ -141,7 +133,7 @@ export function SignUpForm() {
 
         <Button
           type="submit"
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-medium py-2 mt-2"
+          className="mt-2 w-full bg-gradient-to-r from-blue-600 to-blue-800 py-2 font-medium text-white hover:from-blue-700 hover:to-blue-900"
           disabled={createAccount.isPending}
         >
           {createAccount.isPending ? (
@@ -155,12 +147,12 @@ export function SignUpForm() {
             <Separator className="w-full" />
           </div>
           <div className="relative text-center text-xs after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
-          <span className="relative z-10 bg-background px-2 text-muted-foreground">
-            OR CONTINUE WITH
-          </span>
+            <span className="relative z-10 bg-background px-2 text-muted-foreground">
+              OR CONTINUE WITH
+            </span>
+          </div>
         </div>
-        </div>
-        <GoogleButton />
+        <GoogleButton type='up'/>
       </form>
     </Form>
   );

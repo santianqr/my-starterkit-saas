@@ -5,7 +5,7 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { createAccountFormSchema } from "@/lib/formSchemas";
+import { signupFormSchema } from "@/lib/schemas";
 
 export const authRouter = createTRPCRouter({
   hello: publicProcedure
@@ -41,7 +41,7 @@ export const authRouter = createTRPCRouter({
   }),
 
   createAccount: publicProcedure
-    .input(createAccountFormSchema)
+    .input(signupFormSchema)
     .mutation(async ({ ctx, input }) => {
       try {
         // Check if the email already exists
