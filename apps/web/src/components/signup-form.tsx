@@ -60,7 +60,7 @@ export function SignUpForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-slate-300">Full Name</FormLabel>
+              <FormLabel className="text-foreground/80">Full Name</FormLabel>
               <FormControl>
                 <Input
                   placeholder="your name"
@@ -81,7 +81,7 @@ export function SignUpForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-slate-300">Email</FormLabel>
+              <FormLabel className="text-foreground/80">Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="your@email.com"
@@ -103,7 +103,7 @@ export function SignUpForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-slate-300">Password</FormLabel>
+              <FormLabel className="text-foreground/80">Password</FormLabel>
               <FormControl>
                 <PasswordInput
                   placeholder="*****"
@@ -123,7 +123,7 @@ export function SignUpForm() {
           name="passwordConfirmation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-slate-300">Confirm Password</FormLabel>
+              <FormLabel className="text-foreground/80">Confirm Password</FormLabel>
               <FormControl>
                 <PasswordInput
                   placeholder="*****"
