@@ -11,9 +11,9 @@ import {
 
 export function SignUpCard() {
   return (
-    <Card className="w-full max-w-md bg-slate-900/80 shadow-2xl backdrop-blur-md">
+    <Card className="w-full max-w-md backdrop-blur-md shadow-2xl">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl font-bold">
+        <CardTitle className="text-2xl">
           Create an account
         </CardTitle>
         <CardDescription className="text-foreground/60">

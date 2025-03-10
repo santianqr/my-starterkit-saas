@@ -60,12 +60,12 @@ export function SignUpForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-foreground/80">Full Name</FormLabel>
+              <FormLabel className="">Full Name</FormLabel>
               <FormControl>
                 <Input
                   placeholder="your name"
                   type="text"
-                  className="bg-slate-800/70 border-slate-700 text-white placeholder:text-slate-500 focus:border-slate-200 focus:ring-1 focus:ring-blue-600"
+                  className=""
                   {...field}
                 />
               </FormControl>
@@ -81,12 +81,12 @@ export function SignUpForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-foreground/80">Email</FormLabel>
+              <FormLabel className="">Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="your@email.com"
                   type="email"
-                  className="bg-slate-800/70 border-slate-700 text-white placeholder:text-slate-500 focus:border-slate-200 focus:ring-1 focus:ring-blue-600"
+                  className=""
                   {...field}
                 />
               </FormControl>
@@ -103,11 +103,11 @@ export function SignUpForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-foreground/80">Password</FormLabel>
+              <FormLabel className="">Password</FormLabel>
               <FormControl>
                 <PasswordInput
                   placeholder="*****"
-                  className="bg-slate-800/70 border-slate-700 text-white placeholder:text-slate-500 focus:border-slate-200 focus:ring-1 focus:ring-blue-600"
+                  className=""
                   {...field}
                 />
               </FormControl>
@@ -123,11 +123,11 @@ export function SignUpForm() {
           name="passwordConfirmation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-foreground/80">Confirm Password</FormLabel>
+              <FormLabel className="">Confirm Password</FormLabel>
               <FormControl>
                 <PasswordInput
                   placeholder="*****"
-                  className="bg-slate-800/70 border-slate-700  placeholder:text-slate-500 focus:border-slate-200 focus:ring-1 focus:ring-blue-600"
+                  className=""
                   {...field}
                 />
               </FormControl>
@@ -154,11 +154,11 @@ export function SignUpForm() {
           <div className="absolute inset-0 flex items-center">
             <Separator className="w-full" />
           </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-slate-900/80 px-2 text-slate-500">
-              Or continue with
-            </span>
-          </div>
+          <div className="relative text-center text-xs after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+          <span className="relative z-10 bg-background px-2 text-muted-foreground">
+            OR CONTINUE WITH
+          </span>
+        </div>
         </div>
         <GoogleButton />
       </form>
