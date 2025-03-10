@@ -54,18 +54,18 @@ export function SignUpForm() {
   }
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Full Name</FormLabel>
+              <FormLabel className="text-slate-300">Full Name</FormLabel>
               <FormControl>
                 <Input
                   placeholder="your name"
                   type="text"
-                  className="border-gray-700 bg-gray-800 placeholder:text-gray-500"
+                  className="bg-slate-800/70 border-slate-700 text-white placeholder:text-slate-500 focus:border-slate-200 focus:ring-1 focus:ring-blue-600"
                   {...field}
                 />
               </FormControl>
@@ -81,12 +81,12 @@ export function SignUpForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Email</FormLabel>
+              <FormLabel className="text-slate-300">Email</FormLabel>
               <FormControl>
                 <Input
                   placeholder="your@email.com"
                   type="email"
-                  className="border-gray-700 bg-gray-800 placeholder:text-gray-500"
+                  className="bg-slate-800/70 border-slate-700 text-white placeholder:text-slate-500 focus:border-slate-200 focus:ring-1 focus:ring-blue-600"
                   {...field}
                 />
               </FormControl>
@@ -103,11 +103,11 @@ export function SignUpForm() {
           name="password"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Password</FormLabel>
+              <FormLabel className="text-slate-300">Password</FormLabel>
               <FormControl>
                 <PasswordInput
                   placeholder="*****"
-                  className="border-gray-700 bg-gray-800 placeholder:text-gray-500"
+                  className="bg-slate-800/70 border-slate-700 text-white placeholder:text-slate-500 focus:border-slate-200 focus:ring-1 focus:ring-blue-600"
                   {...field}
                 />
               </FormControl>
@@ -123,11 +123,11 @@ export function SignUpForm() {
           name="passwordConfirmation"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
+              <FormLabel className="text-slate-300">Confirm Password</FormLabel>
               <FormControl>
                 <PasswordInput
                   placeholder="*****"
-                  className="border-gray-700 bg-gray-800 placeholder:text-gray-500"
+                  className="bg-slate-800/70 border-slate-700  placeholder:text-slate-500 focus:border-slate-200 focus:ring-1 focus:ring-blue-600"
                   {...field}
                 />
               </FormControl>
@@ -141,7 +141,7 @@ export function SignUpForm() {
 
         <Button
           type="submit"
-          className="w-full font-semibold shadow-md"
+          className="w-full bg-gradient-to-r from-blue-600 to-blue-800 hover:from-blue-700 hover:to-blue-900 text-white font-medium py-2 mt-2"
           disabled={createAccount.isPending}
         >
           {createAccount.isPending ? (
@@ -155,7 +155,7 @@ export function SignUpForm() {
             <Separator className="w-full" />
           </div>
           <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-card px-2 text-muted-foreground">
+            <span className="bg-slate-900/80 px-2 text-slate-500">
               Or continue with
             </span>
           </div>
