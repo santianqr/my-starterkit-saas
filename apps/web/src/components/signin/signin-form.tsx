@@ -23,6 +23,7 @@ import { signinFormSchema } from "@/lib/schemas";
 // import { toast } from "sonner";
 // import { Loader } from "lucide-react";
 // import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export function SignInForm() {
   // const router = useRouter();
@@ -45,10 +46,18 @@ export function SignInForm() {
   //   },
   // });
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof signinFormSchema>) {
+  async function onSubmit(values: z.infer<typeof signinFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     // createAccount.mutate(values);
+    await signIn("credentials", {
+      email: values.email,
+      password: values.password,
+      redirect: true,
+      // callbackUrl: "/",
+    });
+
+
     console.log(values);
   }
   return (

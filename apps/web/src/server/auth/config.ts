@@ -1,11 +1,17 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
-import GitHubProvider from "next-auth/providers/github";
-import CredentialsProvider from "next-auth/providers/credentials";
+import GitHub from "next-auth/providers/github";
+import Credentials from "next-auth/providers/credentials";
+// import { ZodError } from "zod"
+// import { v4 as uuid } from "uuid";
+import { encode as defaultEncode } from "next-auth/jwt";
 
 import { db } from "@/server/db";
-import { env } from "@/env";
+// import { env } from "@/env";
 import { verify } from "argon2";
+// import { hash } from "argon2";
+import { signinFormSchema } from "@/lib/schemas";
+import { getUserByEmail } from "@/lib/queries";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -33,58 +39,31 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
-  pages: {
-    signIn: "/auth/signin",
-    signOut: "/auth/signout",
-  },
+  // pages: {
+  //   signIn: "/auth/signin",
+  //   signOut: "/auth/signout",
+  // },
   adapter: PrismaAdapter(db),
   providers: [
-    GitHubProvider({
-      clientId: env.AUTH_GITHUB_ID,
-      clientSecret: env.AUTH_GITHUB_SECRET,
-    }),
-    CredentialsProvider({
-      id: "credentials",
-      name: "Credentials",
-
+    GitHub,
+    Credentials({
+      // You can specify which fields should be submitted, by adding keys to the `credentials` object.
+      // e.g. domain, username, password, 2FA token, etc.
       credentials: {
-        email: { type: "email" },
-        password: { type: "password" },
+        email: {},
+        password: {},
       },
-      async authorize(credentials) {
-        if (!credentials?.email || typeof credentials.email !== 'string' || !credentials?.password || typeof credentials.password !== 'string') {
-          return null;
+      authorize: async (credentials) => {
+        const data = signinFormSchema.parse(credentials);
+
+        const user = await getUserByEmail(data.email);
+
+        if (!user) {
+          throw new Error("Invalid credentials.");
         }
 
-        const existingUser = await db.user.findUnique({
-          where: { email: credentials.email },
-        });
-
-        if (!existingUser) {
-          return null;
-        }
-
-        if (!existingUser?.password) {
-          return null;
-        }
-
-        if (!existingUser?.emailVerified) {
-          return null;
-        }
-
-        const passwordMatch = await verify(
-          credentials.password,
-          existingUser.password,
-        );
-        if (!passwordMatch) {
-          return null;
-        }
-
-        return {
-          id: existingUser.id,
-          email: existingUser.email,
-          name: existingUser.name,
-        };
+        console.log(user);
+        return user;
       },
     }),
 
@@ -98,14 +77,43 @@ export const authConfig = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-  
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    // session: ({ session, user }) => ({
+    //   ...session,
+    //   user: {
+    //     ...session.user,
+    //     id: user.id,
+    //   },
+    // }),
+    async jwt({ token, account }) {
+      if (account?.provider === "credentials") {
+        token.credentials = true;
+      }
+      return token;
+    },
+  },
+  jwt: {
+    encode: async function (params) {
+      if (params.token?.credentials) {
+        const sessionToken = '1234';
+
+        if (!params.token.sub) {
+          throw new Error("No user ID found in token");
+        }
+
+        const createdSession = await PrismaAdapter(db)?.createSession?.({
+          sessionToken: sessionToken,
+          userId: params.token.sub,
+          expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+        });
+
+        if (!createdSession) {
+          throw new Error("Failed to create session");
+        }
+
+        return sessionToken;
+      }
+      return defaultEncode(params);
+    },
   },
 } satisfies NextAuthConfig;
