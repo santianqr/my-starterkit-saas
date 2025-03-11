@@ -11,13 +11,11 @@ import {
 
 export function SignInCard() {
   return (
-    <Card className="w-full max-w-md backdrop-blur-md shadow-2xl">
+    <Card className="w-full max-w-md shadow-2xl backdrop-blur-md">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">
-          Create an account
-        </CardTitle>
+        <CardTitle className="text-2xl">Login to your account</CardTitle>
         <CardDescription className="text-foreground/60">
-          Enter your information to create your account
+          Enter your email below to login to your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -25,10 +23,10 @@ export function SignInCard() {
       </CardContent>
       <CardFooter>
         <p className="w-full text-center text-sm text-slate-400">
-        Don&apos;t have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/auth/signup"
-            className="text-primary hover:text-primary/80 font-medium"
+            className="font-medium text-primary hover:text-primary/80"
           >
             Sign up
           </Link>

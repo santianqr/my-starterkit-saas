@@ -11,13 +11,11 @@ import {
 
 export function SignUpCard() {
   return (
-    <Card className="w-full max-w-md backdrop-blur-md shadow-2xl">
+    <Card className="w-full max-w-md shadow-2xl backdrop-blur-md">
       <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">
-          Login to your account
-        </CardTitle>
+        <CardTitle className="text-2xl">Create an account</CardTitle>
         <CardDescription className="text-foreground/60">
-          Enter your email below to login to your account
+          Enter your information to create your account
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -28,7 +26,7 @@ export function SignUpCard() {
           Already have an account?{" "}
           <Link
             href="/auth/signin"
-            className="text-primary hover:text-primary/80 font-medium"
+            className="font-medium text-primary hover:text-primary/80"
           >
             Sign in
           </Link>

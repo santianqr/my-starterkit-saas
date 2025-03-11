@@ -1,11 +1,11 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
-// import CredentialsProvider from "next-auth/providers/credentials";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 import { db } from "@/server/db";
 import { env } from "@/env";
-
+import { verify } from "argon2";
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -33,11 +33,61 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
+  pages: {
+    signIn: "/auth/signin",
+    signOut: "/auth/signout",
+  },
+  adapter: PrismaAdapter(db),
   providers: [
     GitHubProvider({
       clientId: env.AUTH_GITHUB_ID,
       clientSecret: env.AUTH_GITHUB_SECRET,
     }),
+    CredentialsProvider({
+      id: "credentials",
+      name: "Credentials",
+
+      credentials: {
+        email: { type: "email" },
+        password: { type: "password" },
+      },
+      async authorize(credentials) {
+        if (!credentials?.email || typeof credentials.email !== 'string' || !credentials?.password || typeof credentials.password !== 'string') {
+          return null;
+        }
+
+        const existingUser = await db.user.findUnique({
+          where: { email: credentials.email },
+        });
+
+        if (!existingUser) {
+          return null;
+        }
+
+        if (!existingUser?.password) {
+          return null;
+        }
+
+        if (!existingUser?.emailVerified) {
+          return null;
+        }
+
+        const passwordMatch = await verify(
+          credentials.password,
+          existingUser.password,
+        );
+        if (!passwordMatch) {
+          return null;
+        }
+
+        return {
+          id: existingUser.id,
+          email: existingUser.email,
+          name: existingUser.name,
+        };
+      },
+    }),
+
     /**
      * ...add more providers here.
      *
@@ -48,7 +98,7 @@ export const authConfig = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
-  adapter: PrismaAdapter(db),
+  
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
