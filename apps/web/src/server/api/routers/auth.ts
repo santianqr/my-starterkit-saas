@@ -7,6 +7,7 @@ import {
 } from "@/server/api/trpc";
 import { signinFormSchema, signupFormSchema } from "@/lib/schemas";
 import { hash, verify } from "argon2";
+// import { signIn } from "@/server/auth";
 
 export const authRouter = createTRPCRouter({
   hello: publicProcedure
@@ -80,17 +81,17 @@ export const authRouter = createTRPCRouter({
       });
 
       if (!user) {
-        throw new Error("Invalid credentials");
+        return null;
       }
 
       if (!user.password) {
-        throw new Error("Invalid credentials");
+        return null;
       }
 
       const passwordMatch = await verify(user.password, input.password);
 
       if (!passwordMatch) {
-        throw new Error("Invalid credentials");
+        return null;
       }
 
       return user;

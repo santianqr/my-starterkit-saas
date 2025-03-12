@@ -20,13 +20,16 @@ import { Separator } from "@/components/ui/separator";
 import { GoogleButton } from "@/components/google-button";
 import { signinFormSchema } from "@/lib/schemas";
 // import { api } from "@/trpc/react";
-// import { toast } from "sonner";
+import { toast } from "sonner";
 // import { Loader } from "lucide-react";
 // import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+// import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+// import { useState } from "react";
 
 export function SignInForm() {
-  // const router = useRouter();
+  const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof signinFormSchema>>({
     resolver: zodResolver(signinFormSchema),
@@ -36,29 +39,21 @@ export function SignInForm() {
     },
   });
 
-  // const createAccount = api.auth.createAccount.useMutation({
-  //   onSuccess: async () => {
-  //     toast.success("Account created successfully");
-  //     router.push("/auth/signin");
-  //   },
-  //   onError: (error) => {
-  //     toast.error(error.message);
-  //   },
-  // });
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signinFormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    // createAccount.mutate(values);
-    await signIn("credentials", {
+    const response = await signIn("credentials", {
       email: values.email,
       password: values.password,
-      redirect: true,
-      // callbackUrl: "/",
+      redirect: false,
     });
 
-
-    console.log(values);
+    if(response && !response.error){
+      router.push('/');
+    } else {
+      toast.error('Wrong email or password');
+    }
   }
   return (
     <Form {...form}>
@@ -129,6 +124,9 @@ export function SignInForm() {
             </span>
           </div>
         </div>
+        {/* {message && (
+          <div className="text-red-500 text-center">{message}</div>
+        )} */}
         <GoogleButton type="in" />
       </form>
     </Form>

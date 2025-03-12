@@ -41,10 +41,10 @@ declare module "next-auth" {
  * @see https://next-auth.js.org/configuration/options
  */
 export const authConfig = {
-  // pages: {
-  //   signIn: "/auth/signin",
-  //   signOut: "/auth/signout",
-  // },
+  pages: {
+    signIn: "/auth/signin",
+    // signOut: "/auth/signout",
+  },
   adapter: PrismaAdapter(db),
   providers: [
     GitHub,
@@ -56,15 +56,9 @@ export const authConfig = {
         password: {},
       },
       authorize: async (credentials) => {
-        try {
-          const data = signinFormSchema.parse(credentials);
-          const user = await api.auth.singin(data);
-          return user;
-        } catch (error) {
-          const errorMessage =
-            error instanceof Error ? error.message : "Invalid credentials";
-          throw new Error(errorMessage);
-        }
+        const data = signinFormSchema.parse(credentials);
+        const user = await api.auth.singin(data);
+        return user;
       },
     }),
 
