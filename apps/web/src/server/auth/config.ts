@@ -43,8 +43,12 @@ declare module "next-auth" {
 export const authConfig = {
   pages: {
     signIn: "/auth/signin",
-    // signOut: "/auth/signout",
+    signOut: "/auth/signout",
   },
+    //   async redirect({ url, baseUrl }) {
+    //  return url.startsWith(baseUrl) ? url : baseUrl + "/";
+    // },
+
   adapter: PrismaAdapter(db),
   providers: [
     GitHub,
