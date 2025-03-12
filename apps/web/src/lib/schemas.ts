@@ -13,16 +13,6 @@ export const signupFormSchema = z
     path: ["passwordConfirmation"],
   });
 
-// export const signinFormSchema = object({
-//   email: string({ required_error: "Email is required" })
-//     .min(1, "Email is required")
-//     .email("Invalid email"),
-//   password: string({ required_error: "Password is required" })
-//     .min(1, "Password is required")
-//     .min(6, "Password must be more than 6 characters")
-//     .max(32, "Password must be less than 32 characters"),
-// });
-
 export const signinFormSchema = z.object({
   email: z.string().email(),
   password: z.string().min(8),

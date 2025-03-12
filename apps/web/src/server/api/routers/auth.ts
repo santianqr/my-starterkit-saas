@@ -5,8 +5,8 @@ import {
   protectedProcedure,
   publicProcedure,
 } from "@/server/api/trpc";
-import { signupFormSchema } from "@/lib/schemas";
-import { hash } from "argon2";
+import { signinFormSchema, signupFormSchema } from "@/lib/schemas";
+import { hash, verify } from "argon2";
 
 export const authRouter = createTRPCRouter({
   hello: publicProcedure
@@ -71,5 +71,28 @@ export const authRouter = createTRPCRouter({
           throw new Error("An unknown error occurred");
         }
       }
+    }),
+  singin: publicProcedure
+    .input(signinFormSchema)
+    .mutation(async ({ ctx, input }) => {
+      const user = await ctx.db.user.findUnique({
+        where: { email: input.email },
+      });
+
+      if (!user) {
+        throw new Error("Invalid credentials");
+      }
+
+      if (!user.password) {
+        throw new Error("Invalid credentials");
+      }
+
+      const passwordMatch = await verify(user.password, input.password);
+
+      if (!passwordMatch) {
+        throw new Error("Invalid credentials");
+      }
+
+      return user;
     }),
 });

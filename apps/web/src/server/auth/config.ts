@@ -8,10 +8,12 @@ import { encode as defaultEncode } from "next-auth/jwt";
 
 import { db } from "@/server/db";
 // import { env } from "@/env";
-import { verify } from "argon2";
+// import { verify } from "argon2";
 // import { hash } from "argon2";
 import { signinFormSchema } from "@/lib/schemas";
-import { getUserByEmail } from "@/lib/queries";
+// import { getUserByEmail } from "@/lib/queries";
+import { api } from "@/trpc/server";
+
 /**
  * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
  * object and keep type safety.
@@ -54,16 +56,15 @@ export const authConfig = {
         password: {},
       },
       authorize: async (credentials) => {
-        const data = signinFormSchema.parse(credentials);
-
-        const user = await getUserByEmail(data.email);
-
-        if (!user) {
-          throw new Error("Invalid credentials.");
+        try {
+          const data = signinFormSchema.parse(credentials);
+          const user = await api.auth.singin(data);
+          return user;
+        } catch (error) {
+          const errorMessage =
+            error instanceof Error ? error.message : "Invalid credentials";
+          throw new Error(errorMessage);
         }
-
-        console.log(user);
-        return user;
       },
     }),
 
@@ -78,13 +79,13 @@ export const authConfig = {
      */
   ],
   callbacks: {
-    // session: ({ session, user }) => ({
-    //   ...session,
-    //   user: {
-    //     ...session.user,
-    //     id: user.id,
-    //   },
-    // }),
+    session: ({ session, user }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: user.id,
+      },
+    }),
     async jwt({ token, account }) {
       if (account?.provider === "credentials") {
         token.credentials = true;
@@ -95,13 +96,13 @@ export const authConfig = {
   jwt: {
     encode: async function (params) {
       if (params.token?.credentials) {
-        const sessionToken = '1234';
+        const sessionToken = "1234";
 
         if (!params.token.sub) {
           throw new Error("No user ID found in token");
         }
 
-        const createdSession = await PrismaAdapter(db)?.createSession?.({
+        const createdSession = await PrismaAdapter(db).createSession?.({
           sessionToken: sessionToken,
           userId: params.token.sub,
           expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
