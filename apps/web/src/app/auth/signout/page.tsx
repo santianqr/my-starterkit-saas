@@ -11,8 +11,11 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Loader } from "lucide-react";
 
 export default function SignOutPage() {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   return (
     <Card className="w-full max-w-md shadow-2xl backdrop-blur-md">
@@ -29,10 +32,14 @@ export default function SignOutPage() {
         <Button
           variant="destructive"
           onClick={async () => {
+            setLoading(true);
             await signOut({redirectTo: "/"});
+            setLoading(false); 
           }}
+          disabled={loading}
+          className="w-24 flex justify-center"
         >
-          Log out
+          {loading ? <Loader className="animate-spin" /> : "Sign Out"}
         </Button>
       </CardFooter>
     </Card>

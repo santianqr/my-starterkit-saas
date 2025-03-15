@@ -21,14 +21,16 @@ import { GoogleButton } from "@/components/google-button";
 import { signinFormSchema } from "@/lib/schemas";
 // import { api } from "@/trpc/react";
 import { toast } from "sonner";
-// import { Loader } from "lucide-react";
+import { Loader } from "lucide-react";
 // import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 // import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-// import { useState } from "react";
+import { useState } from "react";
 
 export function SignInForm() {
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   // 1. Define your form.
   const form = useForm<z.infer<typeof signinFormSchema>>({
@@ -41,6 +43,7 @@ export function SignInForm() {
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof signinFormSchema>) {
+    setLoading(true);
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     const response = await signIn("credentials", {
@@ -49,11 +52,12 @@ export function SignInForm() {
       redirect: false,
     });
 
-    if(response && !response.error){
-      router.push('/');
+    if (response && !response.error) {
+      router.push("/");
     } else {
-      toast.error('Wrong email or password');
+      toast.error("Wrong email or password");
     }
+    setLoading(false);
   }
   return (
     <Form {...form}>
@@ -110,9 +114,9 @@ export function SignInForm() {
         <Button
           type="submit"
           className="mt-2 w-full bg-gradient-to-r from-blue-600 to-blue-800 py-2 font-medium text-white hover:from-blue-700 hover:to-blue-900"
-          // disabled={createAccount.isPending}
+          disabled={loading}
         >
-          Sign In{" "}
+          {loading ? <Loader className="animate-spin" /> : "Sign In"}
         </Button>
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
