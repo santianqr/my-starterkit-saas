@@ -1,7 +1,6 @@
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { type DefaultSession, type NextAuthConfig } from "next-auth";
 import GitHub from "next-auth/providers/github";
-import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
 // import { ZodError } from "zod"
 // import { v4 as uuid } from "uuid";
@@ -53,7 +52,6 @@ export const authConfig = {
   adapter: PrismaAdapter(db),
   providers: [
     GitHub,
-    Google,
     Credentials({
       // You can specify which fields should be submitted, by adding keys to the `credentials` object.
       // e.g. domain, username, password, 2FA token, etc.

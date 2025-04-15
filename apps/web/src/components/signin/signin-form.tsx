@@ -30,7 +30,6 @@ import { useState } from "react";
 
 export function SignInForm() {
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
 
   const router = useRouter();
   // 1. Define your form.
@@ -59,16 +58,6 @@ export function SignInForm() {
       toast.error("Wrong email or password");
     }
     setLoading(false);
-  }
-
-  async function googleOnSubmit(){
-    try {
-      await signIn("google", { callbackUrl: "/" }); // Redirect to home after successful sign-in
-    } catch (error) {
-      toast.error("Failed to sign in with Google");
-    } finally {
-      setGoogleLoading(false);
-    }
   }
   return (
     <Form {...form}>
@@ -142,7 +131,7 @@ export function SignInForm() {
         {/* {message && (
           <div className="text-red-500 text-center">{message}</div>
         )} */}
-        <GoogleButton type="in" onClick={googleOnSubmit} disabled={googleLoading} />
+        <GoogleButton type="in" />
       </form>
     </Form>
   );
